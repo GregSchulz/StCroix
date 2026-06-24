@@ -134,6 +134,10 @@
   .sch-res { display:inline-block; min-width:13px; text-align:center; font-weight:800; font-size:9px; padding:0 2px; border-radius:3px; margin-right:2px; color:#fff; }
   .sch-res.w { background:#1f9d57; } .sch-res.l { background:#c0392b; } .sch-res.d { background:#8a949e; }
   .sch-score { font-weight:700; margin-right:3px; }
+  .popup-link { display:block; margin-top:9px; text-align:center; font-size:11px; font-weight:700;
+    color:#fff; background:#0e7c84; padding:7px 10px; border-radius:6px; text-decoration:none;
+    transition:background .12s; }
+  .popup-link:hover { background:#003539; }
 
   ::-webkit-scrollbar { width:5px; }
   ::-webkit-scrollbar-track { background:transparent; }
@@ -258,6 +262,10 @@ function teamSchedule(age, name){
   const g = (SCHED[age]||[]).filter(x => x[3]===name || x[4]===name);
   return g;  // already in chronological order from source
 }
+
+// Per-age deep link to the official TGS standings/results page (event 4250)
+const STANDINGS_FLIGHT = {"U13":39349,"U14":39346,"U15":39345,"U16":39348,"U17":39347,"U19":39344};
+function standingsUrl(age){ return "https://app.athleteone.com/public/event/4250/schedules-standings/standings/" + STANDINGS_FLIGHT[age]; }
 
 const BRACKET_AGES = ["U19"];
 function isBracket(age){ return BRACKET_AGES.includes(age); }
@@ -407,6 +415,7 @@ function openPopup(team){
             ${rows}
           </div>`;
         })()}
+        <a class="popup-link" href="${standingsUrl(curAge)}" target="_blank" rel="noopener">View ${ageLabel(curAge)} standings &amp; results &#8599;</a>
         <div class="popup-foot">${teamGroup(curAge,team.name)
             ? (isBracket(curAge)
                 ? `Round of 16${bracketOpponent(curAge,team.name)?` &middot; vs ${bracketOpponent(curAge,team.name)}`:""} &middot; `
